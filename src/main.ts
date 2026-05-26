@@ -1,6 +1,7 @@
 import { WebPCodec } from '@playcanvas/splat-transform';
 import { Color, createGraphicsDevice } from 'playcanvas';
 
+import { registerAgentApi } from './agent-api';
 import { registerCameraPosesEvents } from './camera-poses';
 import { CommandQueue } from './command-queue';
 import { registerDocEvents } from './doc';
@@ -88,6 +89,9 @@ const main = async () => {
 
     // edit history (uses the shared queue internally)
     const editHistory = new EditHistory(events, commandQueue);
+
+    // expose a minimal external control surface for deterministic edit commands
+    registerAgentApi(events, editHistory);
 
     // expose the queue as an event for any module that needs to serialise async work
     // alongside history mutations.
